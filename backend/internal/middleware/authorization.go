@@ -1,46 +1,52 @@
 package middleware
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
 	"github.com/diliviotilaar/bookrecommendation/backend/api"
 	"github.com/diliviotilaar/bookrecommendation/backend/internal/tools"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
-var UnauthorizedError = errors.New("Invalid username or token")
+var UnauthorizedError = errors.New("invalid username or password")
 
 func Authorization(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		var username string = r.URL.Query().Get("username")
-		var token string = r.Header.Get("Authorization")
+		// Read headers
+		username := r.Header.Get("Authorization-Username")
+		password := r.Header.Get("Authorization-Password")
 
-		if username == "" || token == "" {
-			log.Error(UnauthorizedError)
+		if username == "" || password == "" {
+			logrus.Error("missing auth headers")
 			api.RequestErrorHandler(w, UnauthorizedError)
 			return
 		}
 
-		var database *tools.DatabaseInterface
-		database, err := tools.NewDatabase()
+		// Query the database for user info
+		var dbPassword string
+		err := tools.DB.QueryRow(
+			context.Background(),
+			`SELECT password FROM "user" WHERE username = $1`,
+			username,
+		).Scan(&dbPassword)
+
 		if err != nil {
-			api.InternalErrorHandler(w)
+			logrus.Error("username not found")
+			api.RequestErrorHandler(w, UnauthorizedError)
 			return
 		}
 
-		var loginDetails *tools.LoginDetails
-		loginDetails = (*database).GetUserLoginDetails(username)
-
-		if (loginDetails == nil || (token != (*loginDetails).AuthToken)) {
-			log.Error(UnauthorizedError)
+		// Compare password
+		if dbPassword != password {
+			logrus.Error("invalid password")
 			api.RequestErrorHandler(w, UnauthorizedError)
-			return	
+			return
 		}
 
+		// Auth OK → continue
 		next.ServeHTTP(w, r)
-		
 	})
 }
-

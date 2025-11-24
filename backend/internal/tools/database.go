@@ -1,32 +1,22 @@
 package tools
 
 import (
-	// log "github.com/sirupsen/logrus"
+	"context"
+	"log"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// Database Collection Names
+var DB *pgxpool.Pool
 
-type Books struct {
-	ISBN           string `json:"isbn" db:"isbn"`
-	BookTitle      string `json:"book_title" db:"book_title"`
-	BookAuthor     string `json:"book_author" db:"book_author"`
-	YearPublished  string `json:"year_published" db:"year_published"`
-	Publisher      string `json:"publisher" db:"publisher"`
-	ImageURLS      string `json:"image_url_s" db:"image_url_s"`
-	ImageURLM      string `json:"image_url_m" db:"image_url_m"`
-	ImageURLL      string `json:"image_url_l" db:"image_url_l"`
-}
+// ConnectPostgres initializes the global database pool
+func ConnectPostgres(url string) {
+	var err error
 
-type Ratings struct {
-	UserID int    `json:"user_id" db:"user_id"`
-	ISBN   string `json:"isbn" db:"isbn"`
-	Ratings int    `json:"ratings" db:"ratings"`
-}
+	DB, err = pgxpool.New(context.Background(), url)
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to PostgreSQL: %v", err)
+	}
 
-type Users struct {
-	UserID   int    `json:"user_id" db:"user_id"`
-	Location string `json:"location" db:"location"`
-	Age      int    `json:"age" db:"age"`
-	Username string `json:"username" db:"username"`
-	Password string `json:"password" db:"password"`
+	log.Println("✅ PostgreSQL connection established")
 }

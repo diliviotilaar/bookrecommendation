@@ -2,17 +2,16 @@ package handlers
 
 import (
 	"github.com/go-chi/chi"
-	chimiddle "github.com/go-chi/chi/middleware"
 	"github.com/diliviotilaar/bookrecommendation/backend/internal/middleware"
 )
 
 func Handler(r *chi.Mux) {
-	// Global Middleware
-	r.Use(chimiddle.StripSlashes)
-	
-	r.Route("/account", func(r chi.Router)) {
-		router.Use(middleware.Authorization)
+	// public auth endpoints
+	r.Post("/register", RegisterHandler)
+	r.Post("/login", LoginHandler)
 
-		router.Get("/coins", GetCoinBalance)
-	}
+	// protected group
+	r.Route("/account", func(r chi.Router) {
+		r.Use(middleware.JWTAuth) // now use JWT middleware
+	})
 }
