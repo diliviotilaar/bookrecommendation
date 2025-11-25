@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/go-chi/chi"
 	"github.com/diliviotilaar/bookrecommendation/backend/internal/middleware"
+	"github.com/diliviotilaar/bookrecommendation/backend/internal/routes"
 )
 
 func Handler(r *chi.Mux) {
@@ -12,6 +13,9 @@ func Handler(r *chi.Mux) {
 
 	// protected group
 	r.Route("/account", func(r chi.Router) {
-		r.Use(middleware.JWTAuth) // now use JWT middleware
+		r.Use(middleware.JWTAuth)
+		
+		r.Get("/books", routes.GetAllBooksRoute)
+		r.Post("/ratings", routes.InsertRatingRoute)
 	})
 }
