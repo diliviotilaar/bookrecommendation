@@ -1,6 +1,6 @@
 
 import PageLoginRegis from "./pages/page_login_register/PageLoginRegis";
-import Home from "./pages/home/Home";
+import Home from "./pages/home/Home"; 
 import { Route, Routes } from "react-router-dom";
 
 function App() {

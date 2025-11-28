@@ -41,6 +41,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// DEBUG ENV
+	logrus.Println("DEBUG JWT_SECRET:", os.Getenv("JWT_SECRET"))
+
 	var dbPassword string
 	var userID int
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function HandlerRegister() {
+export default function useHandlerRegistration() {
   const [isActive, setIsActive] = useState(false);
   const [signupData, setSignupData] = useState({
     username: "",
@@ -17,9 +17,7 @@ export function HandlerRegister() {
     try {
       const res = await fetch("http://localhost:8000/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: signupData.username,
           password: signupData.password,
@@ -36,15 +34,9 @@ export function HandlerRegister() {
       }
 
       setMessage("Register sukses!");
-
-      setSignupData({
-        username: "",
-        password: "",
-        age: "",
-        location: "",
-      });
-
+      setSignupData({ username: "", password: "", age: "", location: "" });
       setIsActive(false);
+
     } catch (err) {
       setMessage("Gagal konek ke server");
     }
@@ -55,7 +47,7 @@ export function HandlerRegister() {
     setIsActive,
     signupData,
     setSignupData,
-    message,
+    message,        // ⬅️ INI WAJIB ADA
     handleRegister,
   };
 }
