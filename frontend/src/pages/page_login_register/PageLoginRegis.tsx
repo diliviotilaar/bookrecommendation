@@ -1,16 +1,60 @@
 import { useState } from "react";
 import { FaGooglePlus, FaFacebook } from "react-icons/fa";
-import { HandlerRegister } from "../../context/handler/HandlerRegistration.tsx";
+import { useNavigate } from "react-router-dom";
+// import { HandlerRegister } from "../../context/handler/HandlerRegistration.tsx";
 
 function PageLoginRegis() {
   /* const variable */
   const [isActive, setIsActive] = useState(false);
-  
+  const [signupData, setSignupData] = useState({
+    username: "",
+    password: "",
+    age: "",
+    location: "",
+  });
+  const [message, setMessage] = useState("");
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    // contoh: setelah login sukses
+    navigate("/home"); 
+  };
   
+  const handlerLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setMessage("");
+
+    try {
+      const res = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify({
+          username: loginData.username,
+          password: loginData.password,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage(data.error || "Login gagal");
+        return;
+      }
+      setMessage("Login sukses!");
+
+      setLoginData({
+        username: "",
+        password: "",
+      });
+    } catch (err) {
+      setMessage("Gagal konek ke server");
+    }
+  };
 
   return (
     <div className={`container ${isActive ? "active" : ""}`} id="container">
@@ -50,10 +94,10 @@ function PageLoginRegis() {
           />
           <button 
             type="button"
-            onClick={(e) => {
+            onClick={() => {
               setIsActive(false);
               // setSignupData({ username: "", password: "", age: "", location: "" });
-              handleRegister(e);
+              // handleRegister(e);
             }}
             >
             Sign Up
@@ -80,7 +124,17 @@ function PageLoginRegis() {
           <span>or use your email for Sign In</span>
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />
-          <button type="button">Sign In</button>
+          <button
+            type="button"
+            onClick={(e) => {
+              setIsActive(false);
+              // setSignupData({ username: "", password: "", age: "", location: "" });
+              handlerLogin(e);
+              handleSignIn();
+            }}
+            >
+            Sign In
+          </button>
           <span 
             className="mobile-toggle" 
             onClick={() => setIsActive(true)}
