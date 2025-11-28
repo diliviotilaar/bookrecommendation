@@ -1,6 +1,5 @@
-import CreateAccount from "./pages/logreg/CreateAccount";
-import Login from "./pages/logreg/Login";
-import PageLoginRegis from "./pages/PageLoginRegis";
+
+import PageLoginRegis from "./pages/page_login_register/PageLoginRegis";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -9,9 +8,7 @@ function App() {
     //   <Route path="/" element={<Login />} />
     //   <Route path="/create-account" element={<CreateAccount />} />
     // </Routes>
-    <body>
       <PageLoginRegis />
-    </body>
   );
 }
 
