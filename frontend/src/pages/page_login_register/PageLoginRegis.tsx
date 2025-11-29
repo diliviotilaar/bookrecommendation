@@ -3,6 +3,7 @@
     import { useNavigate } from "react-router-dom";
     import useHandlerRegistration from "../../hooks/handler/HandlerRegistration";
     import useHandlerLogin from "../../hooks/handler/HandlerLogin";
+    import "./styles/logreg.css";
 
     function PageLoginRegis() {
       /* const variable */
@@ -24,6 +25,7 @@
       } = useHandlerLogin();
 
       return (
+      <div className="body-logreg">
         <div className={`container ${isActive ? "active" : ""}`} id="container">
           {/* Sign Up */}
           <div className="form-container sign-up-container" style={{ order: 2 }}>
@@ -155,8 +157,8 @@
 
             </div>
           </div>
-
         </div>
+      </div>
       );
     }
 

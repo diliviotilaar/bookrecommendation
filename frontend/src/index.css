@@ -1,0 +1,5 @@
+body{
+    background-color: #313131;
+    background: linear-gradient(to right, #313131, rgb(2, 45, 45));
+    width: 100%;
+}
