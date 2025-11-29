@@ -28,5 +28,6 @@ func Handler(r *chi.Mux) {
 		
 		r.Get("/books", routes.GetAllBooksRoute)
 		r.Post("/ratings", routes.InsertRatingRoute)
+		r.Post("/recommendations", routes.GetRecommendationsRoute)
 	})
 }
