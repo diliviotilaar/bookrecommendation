@@ -10,7 +10,7 @@ import (
 )
 
 type Books struct{
-	Isbn	string `json:"isbn,"`
+	Isbn	string `json:"isbn"`
 	BookTitle string `json:"book_title"`
 	BookAuthor string `json:"book_author"`
 	YearPublished string `json:"year_published"`

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function useHandlerLogin() {
+  
   const navigate = useNavigate();
 
   const [loginData, setLoginData] = useState({
@@ -23,25 +24,29 @@ export default function useHandlerLogin() {
       });
 
       const data = await res.json();
-
+      
       if (!res.ok) {
         setMessage(data.error || "Login gagal");
         return;
       }
 
-      // Simpan token
+      // Clear old user data first
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("username");
+
+      // Simpan token + userId + username
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.user.id);
+      localStorage.setItem("username", data.user.username); // from database
 
-      setMessage("Login sukses!");
-      navigate("/home");
-
-      // reset input
-      setLoginData({ username: "", password: "" });
+      navigate("/account/books");
 
     } catch (err) {
       setMessage("Gagal konek ke server");
     }
   };
+
 
   return {
     loginData,

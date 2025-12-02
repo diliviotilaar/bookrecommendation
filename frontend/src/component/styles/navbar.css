@@ -1,7 +1,8 @@
-.container-navbar {
+q   .container-navbar {
     position: absolute;
     box-sizing: border-box;
     width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .contain-navbar{
@@ -9,10 +10,11 @@
     display: flex;
     align-items: center;
     flex-direction: row;
+    justify-items: center;
     width: 100%;
     height: 65px;
     color: azure;
-    padding: 3px 0 0 5px;
+    padding: 0 0 0 10px;
 }
 
 .nav-items {
@@ -38,6 +40,35 @@
     background-color: azure;
     font-size: 12px;
 }
+
+.search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+}
+
+.username-profile{
+    font-size: 18px;
+    font-weight: bold;
+    background-color: rgb(1, 137, 137);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+}
+
+.ai-rec-page{
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    text-decoration: none;
+    align-content: center;
+}
+
 @media (max-width: 786px){
     .nav-items{
         display: block;

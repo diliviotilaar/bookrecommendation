@@ -20,8 +20,13 @@ type loginRequest struct {
 }
 
 type tokenResponse struct {
-	Token string `json:"token"`
+    Token string `json:"token"`
+    User  struct {
+        ID       int    `json:"id"`
+        Username string `json:"username"`
+    } `json:"user"`
 }
+
 
 // simple custom claims
 type MyClaims struct {
@@ -97,5 +102,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(tokenResponse{Token: ss})
+	json.NewEncoder(w).Encode(tokenResponse{
+    Token: ss,
+    User: struct {
+        ID       int    `json:"id"`
+        Username string `json:"username"`
+    }{
+        ID:       userID,
+        Username: body.Username,
+    },
+})
+
 }
