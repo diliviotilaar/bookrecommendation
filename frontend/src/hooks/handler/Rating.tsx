@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { RatingProps } from "../../../types/RatingProps";
 
-function Rating({ userId, isbn, ratingBook }: RatingProps) {
-  const [rating, setRating] = useState<number>(0);
+function Rating({ userId, isbn, initialRating, ratingBook }: RatingProps) {
+  const [rating, setRating] = useState<number>(initialRating || 0);
+
+  useEffect(() => {
+    setRating(initialRating); // update saat prop berubah
+  }, [initialRating]);
 
   const handleRate = (value: number) => {
     setRating(value);
@@ -15,7 +19,7 @@ function Rating({ userId, isbn, ratingBook }: RatingProps) {
         <span
           key={num}
           onClick={(e) => {
-            e.stopPropagation();   // ← FIX PALING PENTING
+            e.stopPropagation();
             handleRate(num);
           }}
           style={{

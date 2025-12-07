@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useSearchParams } from "react-router-dom";
 import NavBar from "../../component/NavBar";
 import BookItemList from "../../component/BookItemList";
 import Pagination from "../../component/Pagination";
@@ -11,15 +11,16 @@ import type { Book } from "../../../types/Book";
 export default function BookPage() {
     const navigate = useNavigate();
     const [books, setBooks] = useState<Book[]>([]);
+    const [userRatings, setUserRatings] = useState<Record<string, number>>({});
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [searchParams] = useSearchParams();
+    const urlSearch = searchParams.get("search") || "";
     const booksPerPage = 10;
-
     const token = localStorage.getItem("token");
     const userId = Number(localStorage.getItem("userId"));
+    const { filters, setFilters, filteredBooks } = useHandlerFilter(books);
 
-    const { filters, setFilters, filteredBooks, uniqueYears, uniqueAuthors, uniquePublishers } = useHandlerFilter(books);
-
+    // Fetch books
     useEffect(() => {
         if (!token) {
             navigate("/login");
@@ -40,7 +41,6 @@ export default function BookPage() {
                 }
 
                 const data = await res.json();
-
                 const mappedBooks: Book[] = data.map((b: any) => ({
                     id: b.isbn,
                     title: b.book_title,
@@ -51,7 +51,6 @@ export default function BookPage() {
                 }));
 
                 setBooks(mappedBooks);
-
             } catch (err) {
                 console.error("Fetch error:", err);
             }
@@ -59,6 +58,43 @@ export default function BookPage() {
 
         fetchBooks();
     }, [token, navigate]);
+
+    // Fetch user ratings
+    useEffect(() => {
+        if (!token) return;
+
+        const fetchRatings = async () => {
+            try {
+                const res = await fetch("http://localhost:8000/account/getratings", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!res.ok) {
+                    console.error("Failed to load user ratings");
+                    return;
+                }
+
+                const data = await res.json();
+                const map: { [isbn: string]: number } = {};
+                data.forEach((r: any) => {
+                    map[r.isbn] = r.ratings; // backend returns 'ratings' field
+                });
+
+                setUserRatings(map);
+            } catch (err) {
+                console.error("Error fetching ratings:", err);
+            }
+        };
+
+        fetchRatings();
+    }, [token]);
+
+    useEffect(() => {
+        if (urlSearch) {
+            setFilters((prev) => ({ ...prev, search: urlSearch }));
+            setCurrentPage(1);
+        }
+    }, [urlSearch, setFilters]);
 
     const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
     const startIndex = (currentPage - 1) * booksPerPage;
@@ -79,7 +115,7 @@ export default function BookPage() {
                         style={{ padding: "8px 12px", borderRadius: "4px", border: "1px solid #ddd" }}
                     >
                         <option value="">All Years</option>
-                        {uniqueYears.map((year) => (
+                        {Array.from(new Set(books.map((b) => b.year))).sort((a, b) => b - a).map((year) => (
                             <option key={year} value={year}>{year}</option>
                         ))}
                     </select>
@@ -110,7 +146,7 @@ export default function BookPage() {
                     />
 
                     <button
-                        onClick={() => { setFilters({ year: "", author: "", publisher: "" }); setCurrentPage(1); }}
+                        onClick={() => { setFilters({ year: "", author: "", publisher: "", sort: "asc" }); setCurrentPage(1); }}
                         style={{ padding: "8px 16px", borderRadius: "4px", background: "#dc3545", color: "white", border: "none", cursor: "pointer" }}
                     >
                         Clear
@@ -124,6 +160,7 @@ export default function BookPage() {
                             key={book.id}
                             book={book}
                             userId={userId}
+                            userRating={userRatings[book.id] || 0}
                         />
                     ))
                 ) : (
