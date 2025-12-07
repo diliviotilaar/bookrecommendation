@@ -146,7 +146,11 @@ export default function BookPage() {
                     />
 
                     <button
-                        onClick={() => { setFilters({ year: "", author: "", publisher: "", sort: "asc" }); setCurrentPage(1); }}
+                        onClick={() => {
+                            setFilters({ year: "", author: "", publisher: "", sort: "asc", search: "" });
+                            setCurrentPage(1);
+                            navigate("/account/books", { replace: true }); // remove ?search=... from URL
+                        }}
                         style={{ padding: "8px 16px", borderRadius: "4px", background: "#dc3545", color: "white", border: "none", cursor: "pointer" }}
                     >
                         Clear
