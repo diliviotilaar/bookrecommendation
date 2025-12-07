@@ -16,6 +16,7 @@ const ContextUserKey = contextKey("user")
 
 // Custom JWT claims
 type Claims struct {
+    UserID   int    `json:"user_id"`
     Username string `json:"username"`
     jwt.RegisteredClaims
 }
