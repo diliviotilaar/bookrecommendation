@@ -21,10 +21,10 @@ function NavBar() {
   return (
     <nav className="container-navbar">
       <div className="contain-navbar">
-        <a href="/account/books">BookRec</a>
+        <a className="web-title" href="/account/books">BookRec</a>
         
         <div className="nav-items">
-          <a href="/ai-recommendation">AI Recommendation</a>
+          <a className="ai-rec-page" href="/ai-recommendation">AI Recommendation</a>
 
           <div className="search-container">
             <input

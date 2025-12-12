@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles/pagination.css";
 
 interface PaginationProps {
   currentPage: number;
@@ -12,7 +13,6 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
 }) => {
   const pageNumbers = [];
-
   const startPage = Math.max(1, currentPage - 1);
   const endPage = Math.min(totalPages, currentPage + 1);
 
@@ -21,53 +21,50 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div style={{ display: "flex", gap: "8px", marginTop: "20px" }}>
-      {/* First Page */}
-      <button onClick={() => onPageChange(1)} disabled={currentPage === 1}>
-        {"<<"}
+    <div className="pagination-container">
+      <button
+        className="pagination-btn"
+        onClick={() => onPageChange(1)}
+        disabled={currentPage === 1}
+      >
+        &laquo;
       </button>
 
-      {/* Prev Page */}
-      <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-        {"<"}
+      <button
+        className="pagination-btn"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        &lsaquo;
       </button>
 
-      {/* Page Numbers */}
       {pageNumbers.map((num) => (
         <button
           key={num}
+          className={`pagination-btn ${num === currentPage ? "active" : ""}`}
           onClick={() => onPageChange(num)}
-          style={{
-            padding: "5px 10px",
-            background: num === currentPage ? "#4f46e5" : "#e5e7eb",
-            color: num === currentPage ? "#fff" : "#000",
-            borderRadius: "4px",
-            border: "none",
-            cursor: "pointer",
-          }}
         >
           {num}
         </button>
       ))}
 
-      {/* Next Page */}
       <button
+        className="pagination-btn"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        {">"}
+        &rsaquo;
       </button>
 
-      {/* Last Page */}
       <button
+        className="pagination-btn"
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
       >
-        {">>"}
+        &raquo;
       </button>
     </div>
   );
 };
 
 export default Pagination;
-    

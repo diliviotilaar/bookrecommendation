@@ -1,55 +1,81 @@
 q   .container-navbar {
-    position: absolute;
-    box-sizing: border-box;
+    position: fixed; /* biar stay di atas */
+    top: 0;
+    left: 0;
     width: 100%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 99;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.contain-navbar{
+.contain-navbar {
     background-color: #313131;
     display: flex;
     align-items: center;
-    flex-direction: row;
-    justify-items: center;
+    justify-content: space-between; /* ini yang ngatur kiri - tengah - kanan */
     width: 100%;
     height: 65px;
+    padding: 0 20px;
     color: azure;
-    padding: 0 0 0 10px;
 }
 
-.nav-items {
-    position: relative;
-    width: 100%;
+/* LEFT LOGO */
+.nav-left {
     display: flex;
-    justify-content: right;
-    margin-top:2px;
-    margin-right: 20px;
-    gap: 20px;
-    overflow: hidden;
-}
-
-.nav-items input{
-    width: 300px;
-    max-width: 100%;
-    height: 30px;
-    font-size: 14px;
-}
-
-.nav-items button{
-    height: 30px;
-    background-color: azure;
-    font-size: 12px;
-}
-
-.search-container{
-    display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 1px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.username-profile{
+/* MIDDLE MENU */
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.ai-rec-page {
     font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
+
+/* RIGHT SIDE: search + profile */
+.nav-items {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-items input {
+    width: 260px;
+    height: 32px;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: none;
+}
+
+.nav-items button {
+    height: 32px;
+    padding: 0 10px;
+    background-color: #bffff2;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* PROFILE */
+.username-profile {
+    font-size: 16px;
     font-weight: bold;
     background-color: rgb(1, 137, 137);
     width: 40px;
@@ -61,16 +87,33 @@ q   .container-navbar {
     color: white;
 }
 
-.ai-rec-page{
+.web-title {
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 600;
     color: white;
     text-decoration: none;
-    align-content: center;
 }
 
-@media (max-width: 786px){
-    .nav-items{
-        display: block;
+/* Responsive */
+@media (max-width: 786px) {
+    .contain-navbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .nav-center {
+        order: 3;
+    }
+
+    .nav-items {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-items input {
+        width: 180px;
     }
 }
