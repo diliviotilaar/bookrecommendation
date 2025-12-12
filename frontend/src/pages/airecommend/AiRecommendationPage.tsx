@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../component/NavBar";
+import "./styles/aiRecommendation.css";
 
 interface Recommendation {
   isbn: string;
@@ -43,7 +44,13 @@ export default function AiRecommendationPage() {
     return (
       <>
         <NavBar />
-        <div className="mx-auto my-auto p-6 bg-white w-full h-full">Loading recommendations...</div>
+
+        <div className="loading-overlay">
+          <div className="loading-box">
+            <div className="loader"></div>
+            <p>Loading recommendations...</p>
+          </div>
+        </div>
       </>
     );
   }
